@@ -7,8 +7,8 @@ public class Pianos {
         EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                Frame window = new Frame();
-                window.setVisible(true);
+                KeyBoard window = new KeyBoard();
+                window.frame.setVisible(true);
             }
         });
     }
