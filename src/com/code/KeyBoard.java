@@ -9,7 +9,6 @@ import java.io.IOException;
 
 class KeyBoard extends JFrame implements KeyListener {
 
-    private SoundPlayer soundPlayer;
 
 
     private Image backgroundImage;
@@ -41,55 +40,55 @@ class KeyBoard extends JFrame implements KeyListener {
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_Q) {
-            soundPlayer = new SoundPlayer("/resources/C.wav");
+            new SoundPlayer("/resources/C.wav");
         }
         if (keyCode == KeyEvent.VK_W) {
-            soundPlayer = new SoundPlayer("/resources/D.wav");
+            new SoundPlayer("/resources/D.wav");
         }
         if (keyCode == KeyEvent.VK_E) {
-            soundPlayer = new SoundPlayer("/resources/E.wav");
+            new SoundPlayer("/resources/E.wav");
         }
         if (keyCode == KeyEvent.VK_R) {
-            soundPlayer = new SoundPlayer("/resources/F.wav");
+            new SoundPlayer("/resources/F.wav");
         }
         if (keyCode == KeyEvent.VK_T) {
-            soundPlayer = new SoundPlayer("/resources/G.wav");
+            new SoundPlayer("/resources/G.wav");
         }
         if (keyCode == KeyEvent.VK_Y) {
-            soundPlayer = new SoundPlayer("/resources/A.wav");
+            new SoundPlayer("/resources/A.wav");
         }
         if (keyCode == KeyEvent.VK_U) {
-            soundPlayer = new SoundPlayer("/resources/B.wav");
+            new SoundPlayer("/resources/B.wav");
         }
         if (keyCode == KeyEvent.VK_I) {
-            soundPlayer = new SoundPlayer("/resources/C1.wav");
+            new SoundPlayer("/resources/C1.wav");
         }
         if (keyCode == KeyEvent.VK_O) {
-            soundPlayer = new SoundPlayer("/resources/D1.wav");
+            new SoundPlayer("/resources/D1.wav");
         }
         if (keyCode == KeyEvent.VK_P) {
-            soundPlayer = new SoundPlayer("/resources/E1.wav");
+            new SoundPlayer("/resources/E1.wav");
         }
         if (keyCode == KeyEvent.VK_2) {
-            soundPlayer = new SoundPlayer("/resources/C#.wav");
+            new SoundPlayer("/resources/C#.wav");
         }
         if (keyCode == KeyEvent.VK_3) {
-            soundPlayer = new SoundPlayer("/resources/D#.wav");
+            new SoundPlayer("/resources/D#.wav");
         }
         if (keyCode == KeyEvent.VK_4) {
-            soundPlayer = new SoundPlayer("/resources/F#.wav");
+            new SoundPlayer("/resources/F#.wav");
         }
         if (keyCode == KeyEvent.VK_5) {
-            soundPlayer = new SoundPlayer("/resources/G#.wav");
+            new SoundPlayer("/resources/G#.wav");
         }
         if (keyCode == KeyEvent.VK_6) {
-            soundPlayer = new SoundPlayer("/resources/Bb.wav");
+            new SoundPlayer("/resources/Bb.wav");
         }
         if (keyCode == KeyEvent.VK_7) {
-            soundPlayer = new SoundPlayer("/resources/C1#.wav");
+            new SoundPlayer("/resources/C1#.wav");
         }
         if (keyCode == KeyEvent.VK_8) {
-            soundPlayer = new SoundPlayer("/resources/D1#.wav");
+            new SoundPlayer("/resources/D1#.wav");
         }
     }
 
