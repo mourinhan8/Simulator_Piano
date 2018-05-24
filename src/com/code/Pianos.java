@@ -8,7 +8,7 @@ public class Pianos {
 
             public void run() {
                 KeyBoard window = new KeyBoard();
-                window.frame.setVisible(true);
+                window.setVisible(true);
             }
         });
     }
