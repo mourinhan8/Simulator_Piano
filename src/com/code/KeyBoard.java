@@ -1,97 +1,117 @@
 package com.code;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.IOException;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.sound.midi.Instrument;
+import javax.sound.midi.MidiChannel;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Synthesizer;
 
-class KeyBoard extends JFrame implements KeyListener {
 
+public class KeyBoard extends JFrame implements MouseListener {
 
+    private WhiteKey[] whiteKeys = new WhiteKey[10];
+    private BlackKey[] blackKeys = new BlackKey[7];
 
-    private Image backgroundImage;
+    private MidiChannel channel;
 
     KeyBoard() {
-        new JFrame("Piano Tiles");
-        setSize(450, 300);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocation(400, 100);
         try {
-            backgroundImage = ImageIO.read(getClass().getClassLoader().getResource("resources/KeyBoard.png"));
-            setContentPane(new JPanel(new BorderLayout()) {
-                @Override
-                public void paintComponent(Graphics g) {
-                    g.drawImage(backgroundImage, 0, 0, null);
+            Synthesizer synthesizer = MidiSystem.getSynthesizer();
+            synthesizer.open();
+            synthesizer.loadAllInstruments(synthesizer.getDefaultSoundbank());
+            Instrument[] instruments = synthesizer.getLoadedInstruments();
+            MidiChannel[] channels = synthesizer.getChannels();
+            for (MidiChannel ch : channels) {
+                if (ch != null) {
+                    this.channel = ch;
+                    break;
                 }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        addKeyListener(this);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {}
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-
-        if (keyCode == KeyEvent.VK_Q) {
-            new SoundPlayer("/resources/C.wav");
-        }
-        if (keyCode == KeyEvent.VK_W) {
-            new SoundPlayer("/resources/D.wav");
-        }
-        if (keyCode == KeyEvent.VK_E) {
-            new SoundPlayer("/resources/E.wav");
-        }
-        if (keyCode == KeyEvent.VK_R) {
-            new SoundPlayer("/resources/F.wav");
-        }
-        if (keyCode == KeyEvent.VK_T) {
-            new SoundPlayer("/resources/G.wav");
-        }
-        if (keyCode == KeyEvent.VK_Y) {
-            new SoundPlayer("/resources/A.wav");
-        }
-        if (keyCode == KeyEvent.VK_U) {
-            new SoundPlayer("/resources/B.wav");
-        }
-        if (keyCode == KeyEvent.VK_I) {
-            new SoundPlayer("/resources/C1.wav");
-        }
-        if (keyCode == KeyEvent.VK_O) {
-            new SoundPlayer("/resources/D1.wav");
-        }
-        if (keyCode == KeyEvent.VK_P) {
-            new SoundPlayer("/resources/E1.wav");
-        }
-        if (keyCode == KeyEvent.VK_2) {
-            new SoundPlayer("/resources/C#.wav");
-        }
-        if (keyCode == KeyEvent.VK_3) {
-            new SoundPlayer("/resources/D#.wav");
-        }
-        if (keyCode == KeyEvent.VK_4) {
-            new SoundPlayer("/resources/F#.wav");
-        }
-        if (keyCode == KeyEvent.VK_5) {
-            new SoundPlayer("/resources/G#.wav");
-        }
-        if (keyCode == KeyEvent.VK_6) {
-            new SoundPlayer("/resources/Bb.wav");
-        }
-        if (keyCode == KeyEvent.VK_7) {
-            new SoundPlayer("/resources/C1#.wav");
-        }
-        if (keyCode == KeyEvent.VK_8) {
-            new SoundPlayer("/resources/D1#.wav");
+            }
+            for (int i = 0; i < instruments.length; i++) {
+                if (instruments[i].toString().startsWith("Instrument MidiPiano")) {
+                    this.channel.programChange(i);
+                    break;
+                }
+            }
+        } catch (MidiUnavailableException ex) {
+            ex.printStackTrace();
         }
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        Key key = (Key) e.getSource();
+        this.channel.noteOn(key.getNote(), 127);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        Key key = (Key) e.getSource();
+        this.channel.noteOff(key.getNote());
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    void createAndShowPiano() {
+        JPanel contentPane = new JPanel(null) {
+            @Override
+            public Dimension getPreferredSize() {
+                int c = getComponentCount();
+                Component last = getComponent(c - 1);
+                Rectangle bound = last.getBounds();
+                int width = 10 + bound.x + bound.width;
+                int height = 10 + bound.y + bound.height;
+                return new Dimension(width, height);
+            }
+
+            @Override
+            public boolean isOptimizedDrawingEnabled() {
+                return false;
+            }
+        };
+
+        for (int i = 0; i < blackKeys.length; i++) {
+            blackKeys[i] = new BlackKey(i);
+            contentPane.add(blackKeys[i]);
+            blackKeys[i].addMouseListener(this);
+        }
+        for (int i = 0; i < whiteKeys.length; i++) {
+            whiteKeys[i] = new WhiteKey(i);
+            contentPane.add(whiteKeys[i]);
+            whiteKeys[i].addMouseListener(this);
+        }
+        JFrame frame = new JFrame("Vitural Piano");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(contentPane);
+        frame.add(new JScrollPane(contentPane));
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+}
+
+interface Key {
+    int WD = 50;
+    int HT = (WD * 9) / 2;
+    int firstNote = 48;
+
+    int getNote();
 }
