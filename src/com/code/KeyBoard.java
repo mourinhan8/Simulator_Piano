@@ -2,8 +2,7 @@ package com.code;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import javax.sound.midi.Instrument;
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
@@ -17,6 +16,9 @@ public class KeyBoard extends JFrame implements MouseListener {
     private BlackKey[] blackKeys = new BlackKey[7];
 
     private MidiChannel channel;
+
+    static int firstNote = 48;
+
 
     KeyBoard() {
         try {
@@ -40,6 +42,13 @@ public class KeyBoard extends JFrame implements MouseListener {
         } catch (MidiUnavailableException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void changeOctave() {
+        for (int i = 0; i < whiteKeys.length; i++)
+            whiteKeys[i].update(firstNote, i);
+        for (int i = 0; i < blackKeys.length; i++)
+            blackKeys[i].update(firstNote, i);
     }
 
     @Override
@@ -70,14 +79,16 @@ public class KeyBoard extends JFrame implements MouseListener {
     }
 
     void createAndShowPiano() {
-        JPanel contentPane = new JPanel(null) {
+        JPanel panel = new JPanel(null) {
+
             @Override
             public Dimension getPreferredSize() {
                 int c = getComponentCount();
                 Component last = getComponent(c - 1);
                 Rectangle bound = last.getBounds();
                 int width = 10 + bound.x + bound.width;
-                int height = 10 + bound.y + bound.height;
+                int height = 50 + bound.y + bound.height;
+
                 return new Dimension(width, height);
             }
 
@@ -89,18 +100,38 @@ public class KeyBoard extends JFrame implements MouseListener {
 
         for (int i = 0; i < blackKeys.length; i++) {
             blackKeys[i] = new BlackKey(i);
-            contentPane.add(blackKeys[i]);
+            panel.add(blackKeys[i]);
             blackKeys[i].addMouseListener(this);
         }
         for (int i = 0; i < whiteKeys.length; i++) {
             whiteKeys[i] = new WhiteKey(i);
-            contentPane.add(whiteKeys[i]);
+            panel.add(whiteKeys[i]);
             whiteKeys[i].addMouseListener(this);
         }
+        JButton plus = new JButton("+ octave");
+        plus.setBounds(780, 270, 100, 30);
+        plus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                KeyBoard.firstNote += 16;
+                changeOctave();
+            }
+        });
+        JButton minus = new JButton("- octave");
+        minus.setBounds(780, 310, 100, 30);
+        minus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                KeyBoard.firstNote -= 16;
+                changeOctave();
+            }
+        });
+        panel.add(plus);
+        panel.add(minus);
         JFrame frame = new JFrame("Vitural Piano");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(contentPane);
-        frame.add(new JScrollPane(contentPane));
+        frame.add(panel);
+        frame.add(new JScrollPane(panel));
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -108,10 +139,10 @@ public class KeyBoard extends JFrame implements MouseListener {
 
 }
 
+
 interface Key {
     int WD = 50;
     int HT = (WD * 9) / 2;
-    int firstNote = 48;
 
     int getNote();
 }
