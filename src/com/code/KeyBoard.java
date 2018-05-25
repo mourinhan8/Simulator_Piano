@@ -128,7 +128,7 @@ public class KeyBoard extends JFrame implements MouseListener {
         });
         panel.add(plus);
         panel.add(minus);
-        JFrame frame = new JFrame("Vitural Piano");
+        JFrame frame = new JFrame("Virtual Piano");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
         frame.add(new JScrollPane(panel));
