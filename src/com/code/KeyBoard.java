@@ -17,7 +17,7 @@ public class KeyBoard extends JFrame implements MouseListener {
 
     private MidiChannel channel;
 
-    static int firstNote = 48;
+    int firstNote = 48;
 
 
     KeyBoard() {
@@ -110,21 +110,28 @@ public class KeyBoard extends JFrame implements MouseListener {
         }
         JButton plus = new JButton("+ octave");
         plus.setBounds(780, 270, 100, 30);
-        plus.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                KeyBoard.firstNote += 16;
+        plus.setBackground(Color.GRAY);
+        plus.addActionListener(e -> {
+            if (firstNote >= 128) {
+                plus.setBackground(Color.RED);
+            } else {
+                firstNote += 16;
                 changeOctave();
             }
         });
         JButton minus = new JButton("- octave");
         minus.setBounds(780, 310, 100, 30);
-        minus.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                KeyBoard.firstNote -= 16;
+        minus.setBackground(Color.GRAY);
+        minus.addActionListener(e -> {
+            if (firstNote <= -16) minus.setBackground(Color.RED);
+            else {
+                plus.setBackground(Color.GRAY);
+                firstNote -= 16;
                 changeOctave();
             }
+        });
+        plus.addActionListener(e -> {
+            if (firstNote >= -16) minus.setBackground(Color.GRAY);
         });
         panel.add(plus);
         panel.add(minus);

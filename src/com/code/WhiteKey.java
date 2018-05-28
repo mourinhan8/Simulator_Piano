@@ -8,7 +8,8 @@ class WhiteKey extends JButton implements Key {
     private int note;
 
     WhiteKey(int pos) {
-        update(KeyBoard.firstNote, pos);
+        KeyBoard keyBoard = new KeyBoard();
+        update(keyBoard.firstNote, pos);
         int WWD = (WD * 3) / 2;
         int left = 10 + WWD * pos;
         setBackground(Color.WHITE);

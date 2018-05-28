@@ -8,7 +8,8 @@ class BlackKey extends JButton implements Key {
     private int note;
 
     BlackKey(int pos) {
-        update(KeyBoard.firstNote, pos);
+        KeyBoard keyBoard = new KeyBoard();
+        update(keyBoard.firstNote, pos);
         int left = 10 + WD + ((WD * 3) / 2) * (pos + (pos / 5) + ((pos + 3) / 5));
         setBackground(Color.BLACK);
         setBounds(left, 10, WD, HT);
